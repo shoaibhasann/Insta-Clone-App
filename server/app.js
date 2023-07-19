@@ -10,10 +10,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Allow requests from 'http://127.0.0.1:5500'
+// allows cross origin request
 app.use(
   cors({
-    origin: "http://127.0.0.1:5500",
+    origin: "http://localhost:5500",
     credentials: true,
   })
 );

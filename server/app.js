@@ -13,7 +13,7 @@ app.use(cookieParser());
 // allows cross origin request
 app.use(
   cors({
-    origin: "http://localhost:5500",
+    origin: [process.env.CLIENT_URL],
     credentials: true,
   })
 );

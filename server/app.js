@@ -7,15 +7,18 @@ const app = express();
 
 // middleware setup
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({
-    origin: 'http://localhost:5500',
-    credentials: true,
-}));
 
+// Allow requests from 'http://127.0.0.1:5500'
+app.use(
+  cors({
+    origin: "http://127.0.0.1:5500",
+    credentials: true,
+  })
+);
 
 // routes
-app.use('/',userRoutes);
+app.use("/", userRoutes);
 
 export default app;

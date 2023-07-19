@@ -9,11 +9,14 @@ const userSchema = new Schema({
     required: [true, "Name is required"],
     minLength: [5, "Name must have at least 5 characters"],
     maxLength: [30, "Name should be less than 30 characters"],
+    trim: true
   },
   username: {
     type: String,
     required: [true, "Username is required"],
     unique: true,
+    lowercase: true,
+    trim: true
   },
   bio: {
     type: String,
@@ -31,6 +34,8 @@ const userSchema = new Schema({
     required: [true, "Password is required"],
     select: false
   },
+},{
+   timestamps: true
 });
 
 // Pre-save hook to hash and salt the password

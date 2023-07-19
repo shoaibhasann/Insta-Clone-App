@@ -58,47 +58,31 @@ const userLogin = async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
-    // Find the user in the database based on the username and include the password field
     const getUserData = await User.findOne({ username }).select("+password");
-
-    // Check if the user with the provided username exists
     if (getUserData && getUserData.username) {
-      // Compare the provided password with the stored hashed password
-      const passwordMatch = await getUserData.comparePassword(
+      const result = await getUserData.comparePassword(
         password,
         getUserData.password
       );
-
-      // If the passwords match, generate a new token and send it in a cookie
-      if (passwordMatch) {
+      if (result) {
         const token = await getUserData.generateToken();
         res.cookie("token", token, cookieOptions);
 
-        // Send a success response with user data
+        // Send a successful response with the user data
         res.status(200).json({
           success: true,
           data: getUserData,
         });
       } else {
-        // If the passwords don't match, send an error response
-        res.status(401).json({
-          success: false,
-          message: "Password is incorrect, Try Again!",
-        });
+        res.status(401).json({ message: "Password is incorrect, try again!" });
       }
     } else {
-      // If the user is not found, send an error response
-      res.status(404).json({
-        success: false,
-        message: "No account associated with this username",
-      });
+      res
+        .status(401)
+        .json({ message: "No account associated with this username" });
     }
   } catch (error) {
-    // Handle any errors that occurred during the database query or processing
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-    });
+    res.status(500).json({ message: error.message });
   }
 };
 
